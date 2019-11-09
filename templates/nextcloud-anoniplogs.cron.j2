@@ -1,0 +1,8 @@
+#jinja2: lstrip_blocks: "True"
+# anonymize ips in already rotated logs
+
+# {{ ansible_managed }}
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+0 3 * * 1 root find {{ nextcloud_log_dir }}/ -type f -regex ".*\.[0-9]*" -exec sed -i -e 's/\"remoteAddr\"\:\"\(\([0-9]\{1,3\}\.\)\{3\}\)[0-9]\{1,3\}/\"remoteAddr\"\:\"\10/g' {} \;

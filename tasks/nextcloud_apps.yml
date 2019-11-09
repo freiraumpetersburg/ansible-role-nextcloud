@@ -1,0 +1,95 @@
+---
+# Install nextcloud apps via the occ cli tool
+- name: Install nextcloud apps
+  shell: |
+    docker exec --user www-data nextcloud php occ app:install --no-interaction {{ item }}
+  with_items: "{{ nextcloud_apps }}"
+  register: nextcloud_occ_output
+  changed_when: "'already installed' not in nextcloud_occ_output.stdout"
+  failed_when: "'Error' in nextcloud_occ_output.stdout"
+  become: yes
+
+# Ownpad Etherpad config via occ cli
+- name: Ownpad » Configure Etherpad hosts
+  shell: |
+    docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_host --value="{{ nextcloud_etherpad_url }}"
+    docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_enable --value="yes"
+  when: nextcloud_etherpad is defined and nextcloud_etherpad
+  become: yes
+
+# Ownpad Ethercalc config via occ cli
+- name: Ownpad » Configure Ethercalc hosts
+  shell: |
+    docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_ethercalc_host --value="{{ nextcloud_ethercalc_url }}"
+    docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_ethercalc_enable --value="yes"
+  when: nextcloud_ethercalc is defined and nextcloud_ethercalc
+  become: yes
+
+# Ownpad via Etherpad API via occ cli
+- name: Ownpad » Configure connection via Etherpad API
+  shell: |
+    docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_useapi --value="yes"
+    docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_apikey --value="{{ nextcloud_etherpad_apikey }}"
+    docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_cookie_domain --value="{{ domain }}"
+    docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_public_enable --value="no"
+  when: nextcloud_etherpad_use_api is defined and nextcloud_etherpad_use_api
+  become: yes
+
+- name: Ownpad » Copy mimetype config
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ nextcloud_image_dir }}/{{ item }}"
+    mode: 0600
+  with_items:
+    - mimetypemapping.json
+  become: yes
+
+# Disable nextcloud apps via the occ cli tool
+- name: Disable nextcloud apps
+  shell: |
+    docker exec --user www-data nextcloud php occ app:disable {{ item }}
+  with_items: "{{ nextcloud_apps_disable }}"
+  become: yes
+
+# Enable audit log
+- name: Enable audit log
+  shell: >
+    docker exec --user www-data nextcloud php occ
+    config:app:set admin_audit logfile
+    --value="/var/www/nextcloud-log/audit.log"
+  when: nextcloud_audit_log
+  become: yes
+
+- name: Ownpad » Configure mimetypes
+  command: >
+    docker cp
+    {{ nextcloud_image_dir }}/mimetypemapping.json nextcloud:/var/www/html/config/mimetypemapping.json
+  become: yes
+
+- name: Ownpad » Chown mimetypemapping in container
+  command: docker exec nextcloud chown www-data:www-data /var/www/html/config/mimetypemapping.json
+  become: yes
+
+# Collabora (richdocuments)
+- name: Collabora » Configure Collabora Code host
+  command: >
+    docker exec --user www-data nextcloud
+    php occ config:app:set
+    richdocuments wopi_url --value="{{ nextcloud_collabora_url }}"
+  become: yes
+
+# Theming
+- name: Theming » Theme nextcloud instance
+  shell: |
+    docker exec --user www-data nextcloud php occ config:app:set theming color --value="{{ nextcloud_theming_color }}"
+    docker exec --user www-data nextcloud php occ config:app:set theming name --value="{{ nextcloud_theming_name }}"
+    docker exec --user www-data nextcloud php occ config:app:set theming slogan --value="{{ nextcloud_theming_slogan }}"
+    docker exec --user www-data nextcloud php occ config:app:set theming url --value="{{ nextcloud_theming_url }}"
+  become: yes
+
+- name: AppOrder » Set default app order
+  command: >
+    docker exec --user www-data nextcloud
+    php occ config:app:set apporder order
+    --value="[\"{{ nextcloud_apporder | join('\",\"') }}\"]"
+  become: yes

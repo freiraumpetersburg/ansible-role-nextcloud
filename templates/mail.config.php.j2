@@ -1,0 +1,23 @@
+<?php
+$CONFIG = array (
+  'app.mail.accounts.default' => array (
+    'email' => '%EMAIL%',
+    'imapHost' => '{{ nextcloud_apps_mail_fqdn }}',
+    'imapPort' => {{ nextcloud_apps_mail_imap_port }},
+    'imapUser' => '%EMAIL%',
+    'imapSslMode' => 'tls',
+    'smtpHost' => '{{ nextcloud_apps_mail_fqdn }}',
+    'smtpPort' => {{ nextcloud_apps_mail_smtp_port }},
+    'smtpUser' => '%EMAIL%',
+    'smtpSslMode' => 'tls',
+  ),
+  'mail_smtpmode' => '{{ nextcloud_mail_smtpmode }}',
+  'mail_smtphost' => '{{ nextcloud_mail_smtphost }}',
+  'mail_smtpport' => {{ nextcloud_mail_smtpport }},
+  'mail_smtpsecure' => '{{ nextcloud_mail_smtpsecure }}',
+  'mail_smtpauth' => {{ nextcloud_mail_smtpauth }},
+  'mail_smtpauthtype' => '{{ nextcloud_mail_smtpauthtype }}',
+  'mail_smtpname' => '{{ nextcloud_mail_smtpname }}',
+  'mail_smtppassword' => '{{ nextcloud_mail_smtppassword }}',
+  'mail_domain' => '{{ nextcloud_mail_domain }}',
+);

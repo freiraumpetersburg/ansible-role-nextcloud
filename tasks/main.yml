@@ -1,0 +1,12 @@
+---
+- import_tasks: configure_install.yml
+- import_tasks: db_setup.yml
+- import_tasks: mount_storage.yml
+  when: nextcloud_mount_enable
+- import_tasks: install_nextcloud.yml
+- import_tasks: nextcloud_apps.yml
+- import_tasks: configure_ldap.yml
+  when: nextcloud_ldap_enable
+- import_tasks: reverse_proxy.yml
+- import_tasks: anonymize_ips.yml
+- meta: flush_handlers

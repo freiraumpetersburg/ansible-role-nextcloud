@@ -1,0 +1,29 @@
+---
+- name: "[ENV] - load environment for cifs mount"
+  include_vars: cifs.yml
+
+- name: create mount credentials file
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/{{ item }}"
+    mode: 0600
+  with_items:
+    - mount-credentials
+  become: yes
+  tags:
+    - nextcloud.storage
+
+# mount cifs share for nextcloud storage
+# //<Benutzername>.your-storagebox.de/backup /mnt/backup-server       cifs    iocharset=utf8,rw,credentials=/etc/backup-credentials.txt,uid=<Systemkonto>,gid=<Systemgruppe>,file_mode=0660,dir_mode=0770 0       0
+- name: mount cifs share for nextcloud storage
+  mount:
+    path: "{{ nextcloud_mount_path }}"
+    src: "//{{ nextcloud_mount_user }}.{{ nextcloud_mount_host }}"
+    fstype: cifs
+    opts: "iocharset=utf8,rw,credentials=/etc/mount-credentials,uid={{ nginx_user }},gid=root,file_mode=0660,dir_mode=0770"
+    dump: 0
+    passno: 0
+    state: mounted
+  become: yes
+  tags:
+    - nextcloud.storage

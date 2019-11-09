@@ -1,0 +1,2 @@
+---
+nextcloud_data_dir: "{{ nextcloud_mount_path }}"

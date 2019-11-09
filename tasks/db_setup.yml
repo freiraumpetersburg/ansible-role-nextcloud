@@ -1,0 +1,21 @@
+---
+- name: Create Nextcloud MariaDB database
+  mysql_db:
+    name: "{{ nextcloud_database_name }}"
+    collation: "utf8mb4_general_ci"
+    encoding: "utf8mb4"
+    state: present
+  become: yes
+
+- name: Add Nextcloud MariaDB user account
+  mysql_user:
+    name: "{{ nextcloud_database_user }}"
+    password: "{{ nextcloud_database_password }}"
+    priv: "{{ nextcloud_database_name }}.*:ALL"
+    append_privs: true
+    host: "{{ item.host }}"
+    state: "present"
+  with_items:
+    - host: localhost
+    - host: "%"
+  become: yes

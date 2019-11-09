@@ -1,0 +1,56 @@
+---
+nextcloud_ldap_config:
+  hasMemberOfFilterSupport: 1
+  # homeFolderNamingRule: ""
+  # lastJpegPhotoLookup: 0
+  ldapAgentName: "cn=nextcloud,ou=admins,{{ nextcloud_ldap_basedn }}"
+  ldapAgentPassword: "{{ nextcloud_ldap_admin_password }}"
+  # ldapAttributesForGroupSearch: ""
+  # ldapAttributesForUserSearch: ""
+  # ldapBackupHost: ""
+  # ldapBackupPort: ""
+  ldapBase: "{{ nextcloud_ldap_basedn }}"
+  ldapBaseGroups: "ou=groups,{{ nextcloud_ldap_basedn }}"
+  ldapBaseUsers: "ou=people,{{ nextcloud_ldap_basedn }}"
+  # ldapCacheTTL: 600
+  ldapConfigurationActive: 1
+  ldapDefaultPPolicyDN: "cn=password,ou=policies,{{ nextcloud_ldap_basedn }}"
+  # ldapDynamicGroupMemberURL: ""
+  ldapEmailAttribute: "mail"
+  ldapExperiencedAdmin: 1
+  # ldapExpertUUIDGroupAttr: ""
+  # ldapExpertUUIDUserAttr: ""
+  ldapExpertUsernameAttr: "uid"
+  # ldapGidNumber: "gidNumber"
+  ldapGroupDisplayName: "description"
+  ldapGroupFilter: "(&(objectClass=groupOfUniqueNames))"
+  # ldapGroupFilterGroups: ""
+  # ldapGroupFilterMode: 0
+  # ldapGroupFilterObjectclass: "groupOfUniqueNames"
+  ldapGroupMemberAssocAttr: "uniqueMember"
+  ldapHost: "openldap"
+  # ldapIgnoreNamingRules: ""
+  ldapLoginFilter: "(&(objectClass=inetOrgPerson)(memberOf=cn=nextcloud,ou=services,{{ nextcloud_ldap_basedn }})(|(uid=%uid)(cn=%uid)(mail=%uid)(entryUUID=%uid)))"
+  # ldapLoginFilterAttributes: ""
+  # ldapLoginFilterEmail: 1
+  # ldapLoginFilterMode: 1
+  # ldapLoginFilterUsername: 1
+  # ldapNestedGroups: 0
+  # ldapOverrideMainServer: ""
+  # ldapPagingSize: 500
+  ldapPort: "{{ docker_ldap_port }}"
+  ldapQuotaAttribute: "quota"
+  ldapQuotaDefault: "100 MB"
+  ldapTLS: 0
+  # ldapUserAvatarRule: "default"
+  ldapUserDisplayName: "displayname"
+  # ldapUserDisplayName2: ""
+  ldapUserFilter: "(&(objectClass=inetOrgPerson)(memberOf=cn=nextcloud,ou=services,{{ nextcloud_ldap_basedn }}))"
+  # ldapUserFilterGroups: "nextcloud"
+  # ldapUserFilterMode: 1
+  # ldapUserFilterObjectclass: "inetOrgPerson"
+  # ldapUuidGroupAttribute: "auto"
+  # ldapUuidUserAttribute: "auto"
+  turnOffCertCheck: 1
+  turnOnPasswordChange: 1
+  useMemberOfToDetectMembership: 1
