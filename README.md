@@ -1,7 +1,7 @@
 Nextcloud
 =========
 
-![GitHub](https://img.shields.io/github/license//freiraumpetersburg/ansible-nextcloud?style=flat-square)
+![GitHub](https://img.shields.io/github/license/freiraumpetersburg/ansible-nextcloud?style=flat-square)
 
 Ansible role for [Nextcloud](https://nextcloud.com/), a cloud service with many features and extensions.
 
