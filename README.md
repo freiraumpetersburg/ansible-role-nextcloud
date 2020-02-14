@@ -1,7 +1,8 @@
-Nextcloud
-=========
+Nextcloud Ansible Role
+======================
 
 ![GitHub](https://img.shields.io/github/license/freiraumpetersburg/ansible-nextcloud?style=flat-square)
+![GitHub release](https://img.shields.io/github/v/release/freiraumpetersburg/ansible-nextcloud?style=flat-square)
 
 Ansible role for [Nextcloud](https://nextcloud.com/), a cloud service with many features and extensions.
 
@@ -161,8 +162,6 @@ Consult [nextcloud scan](https://scan.nextcloud.com).
 
 - Emails of new user are public by default | [Ticket](https://github.com/nextcloud/server/issues/6582)
 - There is actually no GPDR export | [Ticket](https://github.com/nextcloud/data_request/issues/17)
-- E2E encryption does not work with desktop client | [Ticket](https://github.com/nextcloud/server/issues/12365)
-- Circles does not work together with talk | [Ticket](https://github.com/nextcloud/spreed/issues/860)
 - Editing of documents does not work with public shares (txt/odt)
 
 
