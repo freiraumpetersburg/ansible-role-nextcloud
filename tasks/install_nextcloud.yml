@@ -1,139 +1,140 @@
 ---
-- name: Trigger restic backup
-  set_fact:
-    restic_instant_backup_repo: "nextcloud-local"
-  notify: "restic backup"
-  changed_when: nextcloud_register_config.changed or nextcloud_force_rebuild
-
-- meta: flush_handlers
-
-# Force rebuilding of image, but only run when config files have changed
-- name: Build nextcloud docker image
-  docker_image:
-    name: "nextcloud"
-    build:
-      path: "{{ nextcloud_image_dir }}"
-      pull: yes
-    source: build
-    force_source: yes
-  when: nextcloud_register_config.changed or nextcloud_force_rebuild
-  become: yes
-
-- name: Install nextcloud container (with ldap support)
-  docker_container:
-    name: "nextcloud"
-    image: nextcloud
-    state: "{{ nextcloud_state }}"
-    restart: "{{ nextcloud_register_config.changed }}"
-    restart_policy: "{{ nextcloud_restart_policy }}"
-    ports:
-      - "{{ nextcloud_docker_ip }}:{{ nextcloud_port }}:80"
-    links:
-      - "redis:redis"
-    networks:
-      - name: openldap_default
-        links: ["openldap:openldap"]
-    volumes:
-      - "{{ nextcloud_app_dir }}:/var/www/html"
-      - "{{ nextcloud_log_dir }}:/var/www/nextcloud-log"
-      - "{{ nextcloud_data_dir }}:/var/www/nextcloud-data"
-    env:
-      MYSQL_DATABASE: "{{ nextcloud_database_name }}"
-      MYSQL_USER: "{{ nextcloud_database_user }}"
-      MYSQL_PASSWORD: "{{ nextcloud_database_password }}"
-      MYSQL_HOST: "{{ nextcloud_database_host }}"
-      NEXTCLOUD_ADMIN_USER: "{{ nextcloud_admin_user }}"
-      NEXTCLOUD_ADMIN_PASSWORD: "{{ nextcloud_admin_password }}"
-      NEXTCLOUD_DATA_DIR: /var/www/nextcloud-data
-    etc_hosts: >
-      {
-        "{{ docker_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
-        "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
-      }
-  when:
-    - nextcloud_register_config.changed or nextcloud_force_rebuild
-    - nextcloud_ldap_enable
-  become: yes
-
-- name: Install nextcloud container (without ldap support)
-  docker_container:
-    name: "nextcloud"
-    image: nextcloud
-    state: "{{ nextcloud_state }}"
-    restart: "{{ nextcloud_register_config.changed }}"
-    restart_policy: "{{ nextcloud_restart_policy }}"
-    ports:
-      - "{{ nextcloud_docker_ip }}:{{ nextcloud_port }}:80"
-    links:
-      - "redis:redis"
-    volumes:
-      - "{{ nextcloud_app_dir }}:/var/www/html"
-      - "{{ nextcloud_log_dir }}:/var/www/nextcloud-log"
-      - "{{ nextcloud_data_dir }}:/var/www/nextcloud-data"
-    env:
-      MYSQL_DATABASE: "{{ nextcloud_database_name }}"
-      MYSQL_USER: "{{ nextcloud_database_user }}"
-      MYSQL_PASSWORD: "{{ nextcloud_database_password }}"
-      MYSQL_HOST: "{{ nextcloud_database_host }}"
-      NEXTCLOUD_ADMIN_USER: "{{ nextcloud_admin_user }}"
-      NEXTCLOUD_ADMIN_PASSWORD: "{{ nextcloud_admin_password }}"
-      NEXTCLOUD_DATA_DIR: /var/www/nextcloud-data
-    etc_hosts: >
-      {
-        "{{ docker_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
-        "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
-      }
-  when:
-    - nextcloud_register_config.changed or nextcloud_force_rebuild
-    - not nextcloud_ldap_enable
-  become: yes
-
-# ToDo: This is not the nicest way to handle it, but it works for now..
-- name: Wait for docker container to spin up
-  wait_for:
-    host: "{{ nextcloud_docker_ip }} "
-    port: "{{ nextcloud_port }}"
-    delay: 3
-
-# Find out ip of docker nextcloud container
-- name: Find out ip of docker nextcloud container
-  shell: "docker inspect nextcloud | grep -o -m1 -P '(?<=IPAddress\": \").*(?=\",)'"
-  register: nextcloud_ip
-  become: yes
-
-# We use nextcloud autoconfig to add our custom nextcloud config.
-# Unfortunately, this does not completly finish the installation process,
-# see https://github.com/nextcloud/nextcloud-snap/issues/208
-- name: Ping nextcloud install to finish installation
-  command: "curl -L http://{{ nextcloud_ip.stdout }}"
-  when: nextcloud_register_config.changed or nextcloud_force_rebuild
-
-# Run occ upgrade after nextcloud config files have changed
-- name: Run occ upgrade
-  command: docker exec --user www-data nextcloud php occ upgrade
-  when: nextcloud_register_config.changed or nextcloud_force_rebuild
-  become: yes
-
-- name: Add trusted domains to nextcloud config
-  command: >
-    docker exec --user www-data nextcloud
-    php occ config:system:set trusted_domains {{ item.0 }}
-    --value={{ item.1 }}
-  with_indexed_items:
-    - "localhost"
-    - "{{ ansible_fqdn }}"
-    - "{{ nextcloud_fqdn }}"
-  become: yes
-
-# - name: Install nextcloud via occ command
-#   command: >
-#     docker exec --user www-data nextcloud php occ maintenance:install
-#     --database="mysql"
-#     --database-name="{{ nextcloud_database_name }}"
-#     --database-user="{{ nextcloud_database_user }}"
-#     --database-host="{{ nextcloud_database_host }}"
-#     --database-pass="{{ nextcloud_database_password }}"
-#     --data-dir="$NEXTCLOUD_DATA_DIR"
-#     --admin-user="{{ nextcloud_admin_user }}"
-#     --admin-pass="{{ nextcloud_admin_password }}"
-#   become: yes
+  - name: Trigger restic backup
+    set_fact:
+      restic_instant_backup_repo: "nextcloud-local"
+    notify: "restic backup"
+    changed_when: nextcloud_register_config.changed or nextcloud_force_rebuild
+  
+  - meta: flush_handlers
+  
+  # Force rebuilding of image, but only run when config files have changed
+  - name: Build nextcloud docker image
+    docker_image:
+      name: "nextcloud"
+      build:
+        path: "{{ nextcloud_image_dir }}"
+        pull: yes
+      source: build
+      force_source: yes
+    when: nextcloud_register_config.changed or nextcloud_force_rebuild
+    become: yes
+  
+  - name: Install nextcloud container (with ldap support)
+    docker_container:
+      name: "nextcloud"
+      image: nextcloud
+      state: "{{ nextcloud_state }}"
+      restart: "{{ nextcloud_register_config.changed }}"
+      restart_policy: "{{ nextcloud_restart_policy }}"
+      ports:
+        - "{{ nextcloud_docker_ip }}:{{ nextcloud_port }}:80"
+      links:
+        - "redis:redis"
+      networks:
+        - name: openldap_default
+          links: ["openldap:openldap"]
+      volumes:
+        - "{{ nextcloud_app_dir }}:/var/www/html"
+        - "{{ nextcloud_log_dir }}:/var/www/nextcloud-log"
+        - "{{ nextcloud_data_dir }}:/var/www/nextcloud-data"
+      env:
+        MYSQL_DATABASE: "{{ nextcloud_database_name }}"
+        MYSQL_USER: "{{ nextcloud_database_user }}"
+        MYSQL_PASSWORD: "{{ nextcloud_database_password }}"
+        MYSQL_HOST: "{{ nextcloud_database_host }}"
+        NEXTCLOUD_ADMIN_USER: "{{ nextcloud_admin_user }}"
+        NEXTCLOUD_ADMIN_PASSWORD: "{{ nextcloud_admin_password }}"
+        NEXTCLOUD_DATA_DIR: /var/www/nextcloud-data
+      etc_hosts: >
+        {
+          "{{ docker_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
+          "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
+        }
+    when:
+      - nextcloud_register_config.changed or nextcloud_force_rebuild
+      - nextcloud_ldap_enable
+    become: yes
+  
+  - name: Install nextcloud container (without ldap support)
+    docker_container:
+      name: "nextcloud"
+      image: nextcloud
+      state: "{{ nextcloud_state }}"
+      restart: "{{ nextcloud_register_config.changed }}"
+      restart_policy: "{{ nextcloud_restart_policy }}"
+      ports:
+        - "{{ nextcloud_docker_ip }}:{{ nextcloud_port }}:80"
+      links:
+        - "redis:redis"
+      volumes:
+        - "{{ nextcloud_app_dir }}:/var/www/html"
+        - "{{ nextcloud_log_dir }}:/var/www/nextcloud-log"
+        - "{{ nextcloud_data_dir }}:/var/www/nextcloud-data"
+      env:
+        MYSQL_DATABASE: "{{ nextcloud_database_name }}"
+        MYSQL_USER: "{{ nextcloud_database_user }}"
+        MYSQL_PASSWORD: "{{ nextcloud_database_password }}"
+        MYSQL_HOST: "{{ nextcloud_database_host }}"
+        NEXTCLOUD_ADMIN_USER: "{{ nextcloud_admin_user }}"
+        NEXTCLOUD_ADMIN_PASSWORD: "{{ nextcloud_admin_password }}"
+        NEXTCLOUD_DATA_DIR: /var/www/nextcloud-data
+      etc_hosts: >
+        {
+          "{{ docker_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
+          "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
+        }
+    when:
+      - nextcloud_register_config.changed or nextcloud_force_rebuild
+      - not nextcloud_ldap_enable
+    become: yes
+  
+  # Find out ip of docker nextcloud container
+  - name: Find out ip of docker nextcloud container
+    shell: "docker inspect nextcloud | grep -o -m1 -P '(?<=IPAddress\": \").*(?=\",)'"
+    register: nextcloud_ip
+    become: yes
+  
+  # ToDo: This is not the nicest way to handle it, but it works for now..
+  - name: Wait for docker container to spin up
+    wait_for:
+      host: "{{ nextcloud_ip.stdout }}"
+      port: 80
+      delay: 3
+  
+  # We use nextcloud autoconfig to add our custom nextcloud config.
+  # Unfortunately, this does not completly finish the installation process,
+  # see https://github.com/nextcloud/nextcloud-snap/issues/208
+  - name: Ping nextcloud install to finish installation
+    command: "curl -L http://{{ nextcloud_ip.stdout }}"
+    when: nextcloud_register_config.changed or nextcloud_force_rebuild
+  
+  # Run occ upgrade after nextcloud config files have changed
+  - name: Run occ upgrade
+    command: docker exec --user www-data nextcloud php occ upgrade
+    when: nextcloud_register_config.changed or nextcloud_force_rebuild
+    become: yes
+  
+  - name: Add trusted domains to nextcloud config
+    command: >
+      docker exec --user www-data nextcloud
+      php occ config:system:set trusted_domains {{ item.0 }}
+      --value={{ item.1 }}
+    with_indexed_items:
+      - "localhost"
+      - "{{ ansible_fqdn }}"
+      - "{{ nextcloud_fqdn }}"
+    become: yes
+  
+  # - name: Install nextcloud via occ command
+  #   command: >
+  #     docker exec --user www-data nextcloud php occ maintenance:install
+  #     --database="mysql"
+  #     --database-name="{{ nextcloud_database_name }}"
+  #     --database-user="{{ nextcloud_database_user }}"
+  #     --database-host="{{ nextcloud_database_host }}"
+  #     --database-pass="{{ nextcloud_database_password }}"
+  #     --data-dir="$NEXTCLOUD_DATA_DIR"
+  #     --admin-user="{{ nextcloud_admin_user }}"
+  #     --admin-pass="{{ nextcloud_admin_password }}"
+  #   become: yes
+  
