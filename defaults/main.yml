@@ -76,30 +76,31 @@ nextcloud_apps_mail_smtp_port: 587
 nextcloud_default_app: "activity"
 
 nextcloud_apps:
+  - admin_audit
   - apporder
-  - oauth2
-  - user_ldap
-  - files_automatedtagging
-  - files_markdown
-  - files_readmemd
-  - socialsharing_email
-  - groupfolders
-  - quota_warning
-  # - end_to_end_encryption # commented out, until e2e stabilizes in NC
-  - spreed
-  - polls
   - calendar
   - contacts
-  - deck
-  - ownpad
-  - richdocuments
-  - mail
-  - twofactor_totp
-  - external
   - data_request  # for GDPR compliance
-  - terms_of_service  # for GDPR compliance
-  - admin_audit
+  - deck
+  - external
+  - files_automatedtagging
+  - files_readmemd
+  - files_rightclick
+  - groupfolders
   - impersonate  # admin tools
+  - mail
+  - oauth2
+  - ownpad
+  - polls
+  - quota_warning
+  - richdocuments
+  - socialsharing_email
+  - spreed
+  - terms_of_service  # for GDPR compliance
+  - text
+  - twofactor_totp
+  - user_ldap
+  # - end_to_end_encryption # commented out, until e2e stabilizes in NC
 nextcloud_apps_disable:
   - firstrunwizard
   - federation
