@@ -121,3 +121,4 @@ nextcloud_apporder:
 nextcloud_ldap_enable: false
 nextcloud_ldap_basedn: "dc=example,dc=com"
 nextcloud_ldap_admin_password: "password"
+nextcloud_ldap_config: {}
