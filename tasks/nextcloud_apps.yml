@@ -14,7 +14,7 @@
   shell: |
     docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_host --value="{{ nextcloud_etherpad_url }}"
     docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_enable --value="yes"
-  when: nextcloud_etherpad is defined and nextcloud_etherpad
+  when: nextcloud_etherpad_enabled
   become: yes
 
 # Ownpad Ethercalc config via occ cli
@@ -22,7 +22,7 @@
   shell: |
     docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_ethercalc_host --value="{{ nextcloud_ethercalc_url }}"
     docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_ethercalc_enable --value="yes"
-  when: nextcloud_ethercalc is defined and nextcloud_ethercalc
+  when: nextcloud_ethercalc_enabled
   become: yes
 
 # Ownpad via Etherpad API via occ cli
@@ -32,7 +32,7 @@
     docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_apikey --value="{{ nextcloud_etherpad_apikey }}"
     docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_cookie_domain --value="{{ domain }}"
     docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_etherpad_public_enable --value="no"
-  when: nextcloud_etherpad_use_api is defined and nextcloud_etherpad_use_api
+  when: nextcloud_etherpad_enabled and nextcloud_etherpad_use_api
   become: yes
 
 - name: Ownpad » Copy mimetype config

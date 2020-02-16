@@ -59,11 +59,11 @@ nextcloud_theming_slogan: "a safe home for all your data"
 nextcloud_theming_url: "https://nextcloud.com"
 
 # apps
-nextcloud_etherpad: false
+nextcloud_etherpad_enabled: false
 nextcloud_etherpad_url: "pad.example.com"
 nextcloud_etherpad_use_api: true
 nextcloud_etherpad_apikey: "API KEY"
-nextcloud_ethercalc: false
+nextcloud_ethercalc_enabled: false
 nextcloud_ethercalc_url: "calc.example.com"
 
 nextcloud_collabora_url: "office.example.com"
