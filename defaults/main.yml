@@ -18,13 +18,14 @@ nextcloud_force_rebuild: false
 nextcloud_docker_ip: 172.17.0.1
 
 # paths
-nextcloud_image_dir: "/opt/docker/images/nextcloud"
-nextcloud_app_dir: "/opt/docker/data/nextcloud"
-nextcloud_data_dir: "/opt/docker/data/nextcloud-data"
+nextcloud_docker_base_dir: "/opt/docker"
+nextcloud_image_dir: "{{ nextcloud_docker_base_dir }}/images/nextcloud"
+nextcloud_app_dir: "{{ nextcloud_docker_base_dir }}/data/nextcloud"
+nextcloud_data_dir: "{{ nextcloud_docker_base_dir }}/data/nextcloud-data"
 nextcloud_config_files: "['Dockerfile', 'supervisord.conf', 'nextcloud.config.php', 'apcu.config.php', 'apache-pretty-urls.config.php', 'redis.config.php', 'apps.config.php', 'i18n.config.php', 'mail.config.php', 'log.config.php', 'skeletonfiles.config.php']"
 
 # logs
-nextcloud_log_dir: "/opt/docker/data/nextcloud-log"
+nextcloud_log_dir: "{{ nextcloud_docker_base_dir }}/data/nextcloud-log"
 nextcloud_loglevel: 2  # 1 (needed for audit log) | 2 | 3
 nextcloud_log_rotate_size: "50 * 1024 * 1024"  # Byte
 nextcloud_log_anonymize_ips: true
@@ -39,7 +40,7 @@ nextcloud_mount_enable: false
 nextcloud_mount_path: "/mnt/nextcloud-data"
 nextcloud_mount_host: "storage.example.com"
 nextcloud_mount_user: "user"
-nextcloud_mount_pass: "password"
+nextcloud_mount_pass: "{{ vault_nextcloud_mount_pass }}"
 
 # mail
 nextcloud_mail_smtpmode: "smtp"  # smtp | sendmail | qmail
@@ -49,7 +50,7 @@ nextcloud_mail_smtpsecure: "tls"  # "" | tls | ssl
 nextcloud_mail_smtpauth: "true"  # true | false
 nextcloud_mail_smtpauthtype: "PLAIN"  # LOGIN | PLAIN
 nextcloud_mail_smtpname: "sender@example.com"
-nextcloud_mail_smtppassword: "SENDER PASSWORD"
+nextcloud_mail_smtppassword: "{{ vault_nextcloud_mail_smtppassword }}"
 nextcloud_mail_domain: "example.com"
 
 # theming
@@ -121,5 +122,5 @@ nextcloud_apporder:
 # ldap
 nextcloud_ldap_enable: false
 nextcloud_ldap_basedn: "dc=example,dc=com"
-nextcloud_ldap_admin_password: "password"
+nextcloud_ldap_admin_password: "{{ vault_nextcloud_ldap_admin_password }}"
 nextcloud_ldap_config: {}
