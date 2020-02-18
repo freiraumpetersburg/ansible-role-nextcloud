@@ -51,7 +51,6 @@
           "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
         }
     when:
-      - nextcloud_register_config.changed or nextcloud_force_rebuild
       - nextcloud_ldap_enable
     become: yes
   
@@ -84,7 +83,6 @@
           "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
         }
     when:
-      - nextcloud_register_config.changed or nextcloud_force_rebuild
       - not nextcloud_ldap_enable
     become: yes
   
