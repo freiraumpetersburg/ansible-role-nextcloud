@@ -67,7 +67,8 @@ nextcloud_etherpad_apikey: "API KEY"
 nextcloud_ethercalc_enabled: false
 nextcloud_ethercalc_url: "calc.example.com"
 
-nextcloud_collabora_url: "office.example.com"
+nextcloud_collabora_fqdn: "office.example.com"
+nextcloud_collabora_url: "https://office.example.com"
 
 # these are the defaults for the mail app
 nextcloud_apps_mail_fqdn: "mail.example.com"

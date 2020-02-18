@@ -47,7 +47,7 @@
         NEXTCLOUD_DATA_DIR: /var/www/nextcloud-data
       etc_hosts: >
         {
-          "{{ docker_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
+          "{{ nextcloud_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
           "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
         }
     when:
@@ -80,7 +80,7 @@
         NEXTCLOUD_DATA_DIR: /var/www/nextcloud-data
       etc_hosts: >
         {
-          "{{ docker_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
+          "{{ nextcloud_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
           "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
         }
     when:
