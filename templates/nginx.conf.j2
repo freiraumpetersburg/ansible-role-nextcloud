@@ -24,15 +24,15 @@ server {
     server_name  {{ nextcloud_fqdn }};
 
 {% if stage == "production" -%}
-    ssl_certificate {{ nginx_ssl_path }}/letsencrypt/{{ nextcloud_fqdn }}-bundled.cert;
-    ssl_certificate_key {{ nginx_ssl_path }}/letsencrypt/{{ nextcloud_fqdn }}.key;
+    ssl_certificate /etc/nginx/ssl/letsencrypt/{{ nextcloud_fqdn }}-bundled.cert;
+    ssl_certificate_key /etc/nginx/ssl/letsencrypt/{{ nextcloud_fqdn }}.key;
 
     include h5bp/directive-only/ssl.conf;
     {% if nginx_ssl_stapling_enabled -%}
     include h5bp/directive-only/ssl-stapling.conf;
     {% endif -%}
 
-    ssl_dhparam {{ nginx_ssl_path }}/dhparam{{nginx_ssl_dhparam_key_size}}.pem;
+    ssl_dhparam /etc/nginx/ssl/dhparam{{nginx_ssl_dhparam_key_size}}.pem;
 
     # HSTS (ngx_http_headers_module is required) (15768000 seconds = 6 months)
     add_header Strict-Transport-Security max-age=15768000;
