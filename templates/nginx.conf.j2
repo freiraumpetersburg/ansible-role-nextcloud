@@ -28,9 +28,7 @@ server {
     ssl_certificate_key /etc/nginx/ssl/letsencrypt/{{ nextcloud_fqdn }}.key;
 
     include h5bp/directive-only/ssl.conf;
-    {% if nginx_ssl_stapling_enabled -%}
     include h5bp/directive-only/ssl-stapling.conf;
-    {% endif -%}
 
     ssl_dhparam /etc/nginx/ssl/dhparam{{nginx_ssl_dhparam_key_size}}.pem;
 
