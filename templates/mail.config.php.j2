@@ -2,11 +2,11 @@
 $CONFIG = array (
   'app.mail.accounts.default' => array (
     'email' => '%EMAIL%',
-    'imapHost' => '{{ nextcloud_apps_mail_fqdn }}',
+    'imapHost' => '{{ nextcloud_apps_mail_imap_host }}',
     'imapPort' => {{ nextcloud_apps_mail_imap_port }},
     'imapUser' => '%EMAIL%',
     'imapSslMode' => 'tls',
-    'smtpHost' => '{{ nextcloud_apps_mail_fqdn }}',
+    'smtpHost' => '{{ nextcloud_apps_mail_smtp_host }}',
     'smtpPort' => {{ nextcloud_apps_mail_smtp_port }},
     'smtpUser' => '%EMAIL%',
     'smtpSslMode' => 'tls',

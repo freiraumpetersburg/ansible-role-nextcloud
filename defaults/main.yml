@@ -73,8 +73,9 @@ nextcloud_collabora_fqdn: "office.example.com"
 nextcloud_collabora_url: "https://office.example.com"
 
 # these are the defaults for the mail app
-nextcloud_apps_mail_fqdn: "mail.example.com"
+nextcloud_apps_mail_imap_host: "imap.example.com"
 nextcloud_apps_mail_imap_port: 143
+nextcloud_apps_mail_smtp_host: "smtp.example.com"
 nextcloud_apps_mail_smtp_port: 587
 
 nextcloud_default_app: "activity"
