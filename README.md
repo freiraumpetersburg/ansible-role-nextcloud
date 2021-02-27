@@ -14,7 +14,7 @@ This role was originally developed for the [Kulturverein Petersburg](https://kul
 Update
 ------
 
-To bump the nextcloud version, change the `nextcloud_version` variable.
+To bump the Nextcloud version, change the `nextcloud_version` variable.
 
 To update the underlying container (e.g. to update the php version), use
 
@@ -130,10 +130,9 @@ Maintainance
 
 ### Diskspace estimate
 
-      20 GB       Base
+      40 GB       Base
     + 20 GB * 0.5 Archive
     + 20 GB * 0.5 Trashbin
-    + 20 GB       Backup
     --------
       60 GB
 
@@ -162,7 +161,6 @@ Consult [nextcloud scan](https://scan.nextcloud.com).
 
 - Emails of new user are public by default | [Ticket](https://github.com/nextcloud/server/issues/6582)
 - There is actually no GPDR export | [Ticket](https://github.com/nextcloud/data_request/issues/17)
-- Editing of documents does not work with public shares (txt/odt)
 
 
 Privacy

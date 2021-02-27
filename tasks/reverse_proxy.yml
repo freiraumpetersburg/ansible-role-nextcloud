@@ -4,7 +4,7 @@
   command: >
     docker exec --user www-data nextcloud
     php occ config:system:set
-    trusted_proxies 0 --value={{ nextcloud_nginx_ip }}
+    trusted_proxies 0 --value={{ nextcloud_reverse_proxy_ip }}
   become: yes
 
 - name: Configure nextcloud overwritehost

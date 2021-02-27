@@ -7,7 +7,8 @@ nextcloud_restart_policy: "always"
 nextcloud_port: 1600
 nextcloud_fqdn: "cloud.example.com"
 nextcloud_protocol: "https"
-nextcloud_database_host: "database.example.com"
+nextcloud_database_hostname: "{{ inventory_hostname }}"
+nextcloud_database_private_ipv4: "{{ ansible_default_ipv4.address }}"
 nextcloud_database_port: 3306
 nextcloud_database_name: nextcloud
 nextcloud_database_user: nextcloud
@@ -17,7 +18,9 @@ nextcloud_admin_password: "{{ vault_nextcloud_admin_password }}"
 nextcloud_allow_user_to_change_display_name: "true"
 nextcloud_force_rebuild: false
 nextcloud_docker_ip: 172.17.0.1
-nextcloud_nginx_ip: "{{ ansible_default_ipv4.address }}"
+nextcloud_docker_bind_ip: "{{ nextcloud_docker_ip }}"
+nextcloud_reverse_proxy_ip: "{{ ansible_default_ipv4.address }}"
+nextcloud_reverse_proxy_hostname: "{{ inventory_hostname }}"
 
 # paths
 nextcloud_docker_base_dir: "/opt/docker"

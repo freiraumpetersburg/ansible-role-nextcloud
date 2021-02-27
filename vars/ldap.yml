@@ -28,7 +28,8 @@ nextcloud_ldap_config:
   # ldapGroupFilterMode: 0
   # ldapGroupFilterObjectclass: "groupOfUniqueNames"
   ldapGroupMemberAssocAttr: "uniqueMember"
-  ldapHost: "openldap"
+  ldapHost: "{{ nextcloud_ldap_private_ipv4 }}"
+  ldapPort: "{{ nextcloud_ldap_port }}"
   # ldapIgnoreNamingRules: ""
   ldapLoginFilter: "(&(objectClass=inetOrgPerson)(memberOf=cn=nextcloud,ou=services,{{ nextcloud_ldap_basedn }})(|(uid=%uid)(cn=%uid)(mail=%uid)(entryUUID=%uid)))"
   # ldapLoginFilterAttributes: ""
@@ -38,7 +39,6 @@ nextcloud_ldap_config:
   # ldapNestedGroups: 0
   # ldapOverrideMainServer: ""
   # ldapPagingSize: 500
-  ldapPort: "{{ docker_ldap_port }}"
   ldapQuotaAttribute: "quota"
   ldapQuotaDefault: "100 MB"
   ldapTLS: 0
