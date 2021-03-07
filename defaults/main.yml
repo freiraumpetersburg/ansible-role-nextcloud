@@ -18,7 +18,7 @@ nextcloud_admin_password: "{{ vault_nextcloud_admin_password }}"
 nextcloud_allow_user_to_change_display_name: "true"
 nextcloud_force_rebuild: False
 nextcloud_docker_ip: 172.17.0.1
-nextcloud_docker_bind_ip: "{{ nextcloud_docker_ip }}"
+nextcloud_private_ipv4: 127.0.0.1
 nextcloud_reverse_proxy_ip: "{{ ansible_default_ipv4.address }}"
 nextcloud_reverse_proxy_hostname: "{{ inventory_hostname }}"
 
