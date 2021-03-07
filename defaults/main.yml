@@ -16,7 +16,7 @@ nextcloud_database_password: "{{ vault_nextcloud_database_password }}"
 nextcloud_admin_user: "{{ vault_nextcloud_admin_user }}"
 nextcloud_admin_password: "{{ vault_nextcloud_admin_password }}"
 nextcloud_allow_user_to_change_display_name: "true"
-nextcloud_force_rebuild: false
+nextcloud_force_rebuild: False
 nextcloud_docker_ip: 172.17.0.1
 nextcloud_docker_bind_ip: "{{ nextcloud_docker_ip }}"
 nextcloud_reverse_proxy_ip: "{{ ansible_default_ipv4.address }}"
@@ -33,15 +33,15 @@ nextcloud_config_files: "['Dockerfile', 'supervisord.conf', 'nextcloud.config.ph
 nextcloud_log_dir: "{{ nextcloud_docker_base_dir }}/data/nextcloud-log"
 nextcloud_loglevel: 2  # 1 (needed for audit log) | 2 | 3
 nextcloud_log_rotate_size: "50 * 1024 * 1024"  # Byte
-nextcloud_log_anonymize_ips: true
-nextcloud_audit_log: false
+nextcloud_log_anonymize_ips: True
+nextcloud_audit_log: False
 
 # redis caching
 nextcloud_redis_host: redis
 nextcloud_redis_port: 6379
 
 # data cifs mount
-nextcloud_mount_enable: false
+nextcloud_mount_enable: False
 nextcloud_mount_path: "/mnt/nextcloud-data"
 nextcloud_mount_host: "storage.example.com"
 nextcloud_mount_user: "user"
@@ -65,11 +65,11 @@ nextcloud_theming_slogan: "a safe home for all your data"
 nextcloud_theming_url: "https://nextcloud.com"
 
 # apps
-nextcloud_etherpad_enabled: false
+nextcloud_etherpad_enabled: False
 nextcloud_etherpad_url: "pad.example.com"
-nextcloud_etherpad_use_api: true
+nextcloud_etherpad_use_api: True
 nextcloud_etherpad_apikey: "API KEY"
-nextcloud_ethercalc_enabled: false
+nextcloud_ethercalc_enabled: False
 nextcloud_ethercalc_url: "calc.example.com"
 
 nextcloud_collabora_fqdn: "office.example.com"
@@ -127,7 +127,7 @@ nextcloud_apporder:
   - /apps/contacts/
 
 # ldap
-nextcloud_ldap_enable: false
+nextcloud_ldap_enable: False
 nextcloud_ldap_basedn: "dc=example,dc=com"
 nextcloud_ldap_admin_password: "{{ vault_nextcloud_ldap_admin_password }}"
 nextcloud_ldap_config: {}

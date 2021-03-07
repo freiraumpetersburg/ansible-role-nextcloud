@@ -17,7 +17,6 @@
       source: build
       force_source: yes
     when: nextcloud_register_config.changed or nextcloud_force_rebuild
-    become: yes
 
   - name: Install nextcloud container (with ldap support)
     docker_container:
@@ -52,7 +51,6 @@
         }
     when:
       - nextcloud_ldap_enable
-    become: yes
 
   - name: Install nextcloud container (without ldap support)
     docker_container:
@@ -84,13 +82,11 @@
         }
     when:
       - not nextcloud_ldap_enable
-    become: yes
 
   # Find out ip of docker nextcloud container
   - name: Find out ip of docker nextcloud container
     shell: "docker inspect nextcloud | grep -o -m1 -P '(?<=IPAddress\": \").*(?=\",)'"
     register: nextcloud_ip
-    become: yes
 
   # ToDo: This is not the nicest way to handle it, but it works for now..
   - name: Wait for docker container to spin up
@@ -110,7 +106,6 @@
   - name: Run occ upgrade
     command: docker exec --user www-data nextcloud php occ upgrade
     when: nextcloud_register_config.changed or nextcloud_force_rebuild
-    become: yes
 
   - name: Add trusted domains to nextcloud config
     command: >
@@ -120,7 +115,6 @@
     with_indexed_items:
       - "localhost"
       - "{{ nextcloud_fqdn }}"
-    become: yes
 
   # - name: Install nextcloud via occ command
   #   command: >
@@ -133,4 +127,3 @@
   #     --data-dir="$NEXTCLOUD_DATA_DIR"
   #     --admin-user="{{ nextcloud_admin_user }}"
   #     --admin-pass="{{ nextcloud_admin_password }}"
-  #   become: yes

@@ -7,8 +7,7 @@
   shell: |
     docker exec --user www-data nextcloud php occ ldap:show-config s01
   register: nextcloud_ldap_config_exists
-  changed_when: false
-  become: yes
+  changed_when: False
 
 # Create nextcloud ldap config
 - name: Create nextcloud ldap config
@@ -17,7 +16,6 @@
   when:
     - "nextcloud_ldap_config_exists.stdout"
     - "'Invalid configID' in nextcloud_ldap_config_exists.stdout"
-  become: yes
 
 # Set nextcloud ldap config variables
 - name: Set nextcloud ldap config variables
@@ -25,15 +23,13 @@
     docker exec --user www-data nextcloud php occ ldap:set-config \
     s01 {{ item.key }} "{{ item.value }}"
   with_items: "{{ lookup('dict', nextcloud_ldap_config) }}"
-  become: yes
 
 # Test nextcloud ldap config
 - name: Test nextcloud ldap config
   shell: |
     docker exec --user www-data nextcloud php occ ldap:test-config s01
   register: nextcloud_ldap_config_test
-  changed_when: false
+  changed_when: False
   failed_when:
     - "'configuration is valid' not in nextcloud_ldap_config_test.stdout"
     - "'connection could be established' not in nextcloud_ldap_config_test.stdout"
-  become: yes

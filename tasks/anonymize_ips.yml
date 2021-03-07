@@ -5,12 +5,10 @@
     dest: "/etc/cron.d/nextcloud-anoniplogs"
     mode: "0640"
   when: nextcloud_log_anonymize_ips
-  become: yes
 
 - name: Remove nextcloud cron script
   file:
     state: absent
     path: "/etc/cron.d/nextcloud-anoniplogs"
   when: not nextcloud_log_anonymize_ips
-  become: yes
 

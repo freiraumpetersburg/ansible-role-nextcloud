@@ -1,18 +1,15 @@
 ---
-# Configure nextcloud reverse proxy
 - name: Configure nextcloud reverse proxy
   command: >
     docker exec --user www-data nextcloud
     php occ config:system:set
     trusted_proxies 0 --value={{ nextcloud_reverse_proxy_ip }}
-  become: yes
 
 - name: Configure nextcloud overwritehost
   command: >
     docker exec --user www-data nextcloud
     php occ config:system:set
     overwritehost --value={{ nextcloud_fqdn }}
-  become: yes
 
 # Copy nginx block (vhost) config files
 - name: Copy nginx block (vhost) config file to available sites
@@ -22,7 +19,6 @@
   with_items:
     - nginx.conf
   notify: "reload nginx"
-  become: yes
 
 - name: Enable nginx block config
   file:
@@ -30,4 +26,3 @@
     dest: "/etc/nginx/sites-enabled/{{ nextcloud_fqdn }}.conf"
     state: link
   notify: "reload nginx"
-  become: yes

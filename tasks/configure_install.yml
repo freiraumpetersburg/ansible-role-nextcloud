@@ -15,7 +15,6 @@
       owner: www-data
     - path: "{{ nextcloud_log_dir }}"
       owner: www-data
-  become: yes
 
 - name: Copy nextcloud config files for first container creation
   template:
@@ -24,7 +23,6 @@
     mode: 0600
   with_items: "{{ nextcloud_config_files }}"
   register: nextcloud_register_config
-  become: yes
 
 # see https://github.com/nextcloud/docker/issues/464
 - name: Copy nextcloud config files for already created container
@@ -34,4 +32,3 @@
     mode: 0600
     owner: "33"  # www-data in container
   with_items: "{{ nextcloud_config_files }}"
-  become: yes

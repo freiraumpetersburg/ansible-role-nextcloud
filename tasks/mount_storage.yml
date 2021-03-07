@@ -9,7 +9,6 @@
     mode: 0600
   with_items:
     - mount-credentials
-  become: yes
   tags:
     - nextcloud.storage
 
@@ -24,6 +23,5 @@
     dump: 0
     passno: 0
     state: mounted
-  become: yes
   tags:
     - nextcloud.storage
