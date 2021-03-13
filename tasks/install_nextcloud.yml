@@ -10,67 +10,43 @@
     force_source: yes
   when: nextcloud_register_config.changed or nextcloud_force_rebuild
 
-- name: Install nextcloud container (with ldap support)
+- name: Install nextcloud container
   docker_container:
     name: "nextcloud"
     image: nextcloud
     state: "{{ nextcloud_state }}"
     restart: "{{ nextcloud_register_config.changed }}"
     restart_policy: "{{ nextcloud_restart_policy }}"
-    ports:
-      - "{{ nextcloud_private_ipv4 }}:{{ nextcloud_port }}:80"
-    links:
-      - "redis:redis"
-    volumes:
-      - "{{ nextcloud_app_dir }}:/var/www/html"
-      - "{{ nextcloud_log_dir }}:/var/www/nextcloud-log"
-      - "{{ nextcloud_data_dir }}:/var/www/nextcloud-data"
-    env:
-      MYSQL_DATABASE: "{{ nextcloud_database_name }}"
-      MYSQL_USER: "{{ nextcloud_database_user }}"
-      MYSQL_PASSWORD: "{{ nextcloud_database_password }}"
-      MYSQL_HOST: "{{ nextcloud_database_private_ipv4 }}"
-      NEXTCLOUD_ADMIN_USER: "{{ nextcloud_admin_user }}"
-      NEXTCLOUD_ADMIN_PASSWORD: "{{ nextcloud_admin_password }}"
-      NEXTCLOUD_DATA_DIR: /var/www/nextcloud-data
+    published_ports: "{{ nextcloud_ports }}"
+    volumes: "{{ nextcloud_volumes }}"
+    env: "{{ nextcloud_environment }}"
     etc_hosts: >
       {
         "{{ nextcloud_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
         "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
       }
   when:
-    - nextcloud_ldap_enable
+    - nextcloud_redis_host != "redis"
 
-- name: Install nextcloud container (without ldap support)
+- name: Install nextcloud container (with redis in docker)
   docker_container:
     name: "nextcloud"
     image: nextcloud
     state: "{{ nextcloud_state }}"
     restart: "{{ nextcloud_register_config.changed }}"
     restart_policy: "{{ nextcloud_restart_policy }}"
-    ports:
-      - "{{ nextcloud_private_ipv4 }}:{{ nextcloud_port }}:80"
+    published_ports: "{{ nextcloud_ports }}"
     links:
       - "redis:redis"
-    volumes:
-      - "{{ nextcloud_app_dir }}:/var/www/html"
-      - "{{ nextcloud_log_dir }}:/var/www/nextcloud-log"
-      - "{{ nextcloud_data_dir }}:/var/www/nextcloud-data"
-    env:
-      MYSQL_DATABASE: "{{ nextcloud_database_name }}"
-      MYSQL_USER: "{{ nextcloud_database_user }}"
-      MYSQL_PASSWORD: "{{ nextcloud_database_password }}"
-      MYSQL_HOST: "{{ nextcloud_database_private_ipv4 }}"
-      NEXTCLOUD_ADMIN_USER: "{{ nextcloud_admin_user }}"
-      NEXTCLOUD_ADMIN_PASSWORD: "{{ nextcloud_admin_password }}"
-      NEXTCLOUD_DATA_DIR: /var/www/nextcloud-data
+    volumes: "{{ nextcloud_volumes }}"
+    env: "{{ nextcloud_environment }}"
     etc_hosts: >
       {
         "{{ nextcloud_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
         "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
       }
   when:
-    - not nextcloud_ldap_enable
+    - nextcloud_redis_host == "redis"
 
 # Find out ip of docker nextcloud container
 - name: Find out ip of docker nextcloud container

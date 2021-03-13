@@ -1,1 +1,17 @@
 ---
+nextcloud_ports:
+  - "{{ nextcloud_private_ipv4 }}:{{ nextcloud_port }}:80"
+
+nextcloud_environment:
+  MYSQL_DATABASE: "{{ nextcloud_database_name }}"
+  MYSQL_USER: "{{ nextcloud_database_user }}"
+  MYSQL_PASSWORD: "{{ nextcloud_database_password }}"
+  MYSQL_HOST: "{{ nextcloud_database_private_ipv4 }}"
+  NEXTCLOUD_ADMIN_USER: "{{ nextcloud_admin_user }}"
+  NEXTCLOUD_ADMIN_PASSWORD: "{{ nextcloud_admin_password }}"
+  NEXTCLOUD_DATA_DIR: /var/www/nextcloud-data
+
+nextcloud_volumes:
+  - "{{ nextcloud_app_dir }}:/var/www/html"
+  - "{{ nextcloud_log_dir }}:/var/www/nextcloud-log"
+  - "{{ nextcloud_data_dir }}:/var/www/nextcloud-data"
