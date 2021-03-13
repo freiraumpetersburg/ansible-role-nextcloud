@@ -1,12 +1,4 @@
 ---
-- name: Trigger restic backup
-  set_fact:
-    restic_instant_backup_repo: "nextcloud-local"
-  notify: "restic backup"
-  changed_when: nextcloud_register_config.changed or nextcloud_force_rebuild
-
-- meta: flush_handlers
-
 # Force rebuilding of image, but only run when config files have changed
 - name: Build nextcloud docker image
   docker_image:
