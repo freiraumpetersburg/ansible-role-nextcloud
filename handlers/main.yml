@@ -4,3 +4,4 @@
     name: nginx
     state: reloaded
   become: True
+  delegate_to: "{{ nextcloud_reverse_proxy_hostname }}"
