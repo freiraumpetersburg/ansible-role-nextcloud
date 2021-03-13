@@ -131,3 +131,5 @@ nextcloud_ldap_enable: False
 nextcloud_ldap_basedn: "dc=example,dc=com"
 nextcloud_ldap_admin_password: "{{ vault_nextcloud_ldap_admin_password }}"
 nextcloud_ldap_config: {}
+nextcloud_ldap_host: 127.0.0.1
+nextcloud_ldap_port: 389
