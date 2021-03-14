@@ -80,3 +80,15 @@
   with_indexed_items:
     - "localhost"
     - "{{ nextcloud_fqdn }}"
+
+- name: Configure nextcloud reverse proxy
+  command: >
+    docker exec --user www-data nextcloud
+    php occ config:system:set
+    trusted_proxies 0 --value={{ nextcloud_reverse_proxy_ip }}
+
+- name: Configure nextcloud overwritehost
+  command: >
+    docker exec --user www-data nextcloud
+    php occ config:system:set
+    overwritehost --value={{ nextcloud_fqdn }}
