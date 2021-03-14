@@ -151,7 +151,7 @@ Switch maintainance off:
 
 Generate new fingerprint after restore:
 
-    docker exec --user www-data nextcloud php occ maintainance:data-fingerprint
+    docker exec --user www-data nextcloud php occ maintenance:data-fingerprint
 
 ### Nextcloud scan
 
