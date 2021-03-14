@@ -27,6 +27,8 @@ server {
     listen  [::]:443 ssl http2;
     {% endif %}
 
+    server_name {{ nextcloud_fqdn_aliases | join(' ') }};
+
     {% if stage != "development" -%}
     ssl_certificate /etc/nginx/ssl/letsencrypt/{{ nextcloud_fqdn }}-bundled.cert;
     ssl_certificate_key /etc/nginx/ssl/letsencrypt/{{ nextcloud_fqdn }}.key;
