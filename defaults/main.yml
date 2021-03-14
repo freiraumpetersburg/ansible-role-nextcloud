@@ -6,6 +6,7 @@ nextcloud_state: "started"
 nextcloud_restart_policy: "always"
 nextcloud_port: 1600
 nextcloud_fqdn: "cloud.example.com"
+nextcloud_fqdn_aliases: []
 nextcloud_protocol: "https"
 nextcloud_database_hostname: "{{ inventory_hostname }}"
 nextcloud_database_private_ipv4: "{{ ansible_default_ipv4.address }}"
@@ -73,7 +74,7 @@ nextcloud_ethercalc_enabled: False
 nextcloud_ethercalc_url: "calc.example.com"
 
 nextcloud_collabora_fqdn: "office.example.com"
-nextcloud_collabora_url: "https://office.example.com"
+nextcloud_collabora_url: "https://{{ nextcloud_collabora_fqdn }}"
 
 # these are the defaults for the mail app
 nextcloud_apps_mail_imap_host: "imap.example.com"

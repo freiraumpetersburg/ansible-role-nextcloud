@@ -1,29 +1,33 @@
 # {{ ansible_managed }}
 
-{% if stage == "production" -%}
+{% if stage != "development" -%}
 server {
     listen      80;
     listen [::]:80;
 
-    server_name  {{ nextcloud_fqdn }};
+    server_name {{ nextcloud_fqdn }} {{ nextcloud_fqdn_aliases | join(' ') }};
 
-    return 301 https://{{ nextcloud_fqdn }}$request_uri;
+    {% block acme_challenge -%}
+    include acme-challenge-location.conf;
+    {% endblock -%}
+
+    location / {
+        return 301 https://{{ nextcloud_fqdn }}$request_uri;
+    }
 }
 {% endif -%}
 
+{% if nextcloud_fqdn_aliases | length > 0 -%}
 server {
-{% if stage != "production" -%}
+    {% if stage == "development" -%}
     listen       80;
     listen  [::]:80;
-{% endif -%}
-{% if stage == "production" -%}
+    {% else %}
     listen       443 ssl http2;
     listen  [::]:443 ssl http2;
-{% endif -%}
+    {% endif %}
 
-    server_name  {{ nextcloud_fqdn }};
-
-{% if stage == "production" -%}
+    {% if stage != "development" -%}
     ssl_certificate /etc/nginx/ssl/letsencrypt/{{ nextcloud_fqdn }}-bundled.cert;
     ssl_certificate_key /etc/nginx/ssl/letsencrypt/{{ nextcloud_fqdn }}.key;
 
@@ -34,7 +38,37 @@ server {
 
     # HSTS (ngx_http_headers_module is required) (15768000 seconds = 6 months)
     add_header Strict-Transport-Security max-age=15768000;
+    {% endif -%}
+
+    location / {
+        return 301 http{{ (stage == "development") | ternary('', 's') }}://{{ nextcloud_fqdn }}$request_uri;
+    }
+}
 {% endif -%}
+
+server {
+    {% if stage == "development" -%}
+    listen       80;
+    listen  [::]:80;
+    {% else %}
+    listen       443 ssl http2;
+    listen  [::]:443 ssl http2;
+    {% endif %}
+
+    server_name {{ nextcloud_fqdn }};
+
+    {% if stage != "development" -%}
+    ssl_certificate /etc/nginx/ssl/letsencrypt/{{ nextcloud_fqdn }}-bundled.cert;
+    ssl_certificate_key /etc/nginx/ssl/letsencrypt/{{ nextcloud_fqdn }}.key;
+
+    include h5bp/directive-only/ssl.conf;
+    include h5bp/directive-only/ssl-stapling.conf;
+
+    ssl_dhparam /etc/nginx/ssl/dhparam{{nginx_ssl_dhparam_key_size}}.pem;
+
+    # HSTS (ngx_http_headers_module is required) (15768000 seconds = 6 months)
+    add_header Strict-Transport-Security max-age=15768000;
+    {% endif -%}
 
     # Specify a charset
     charset utf-8;
@@ -45,12 +79,6 @@ server {
     {% if stage == 'development' -%}
     # https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/#virtualbox
     sendfile off;
-    {% endif -%}
-
-    {% if stage == "production" -%}
-    {% block acme_challenge -%}
-    include acme-challenge-location.conf;
-    {% endblock -%}
     {% endif -%}
 
     # A suitable client_max_body_size has to be set or you will get errors
