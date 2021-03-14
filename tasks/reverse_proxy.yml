@@ -19,6 +19,7 @@
   with_items:
     - nginx.conf
   notify: "reload nginx"
+  delegate_to: "{{ nextcloud_reverse_proxy_hostname }}"
 
 - name: Enable nginx block config
   file:
@@ -26,3 +27,4 @@
     dest: "/etc/nginx/sites-enabled/{{ nextcloud_fqdn }}.conf"
     state: link
   notify: "reload nginx"
+  delegate_to: "{{ nextcloud_reverse_proxy_hostname }}"
