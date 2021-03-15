@@ -22,6 +22,11 @@
     docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_ethercalc_enable --value="yes"
   when: nextcloud_ethercalc_enabled
 
+- name: Ownpad » Disable Ethercalc
+  shell: |
+    docker exec --user www-data nextcloud php occ config:app:set ownpad ownpad_ethercalc_enable --value="no"
+  when: not nextcloud_ethercalc_enabled
+
 # Ownpad via Etherpad API via occ cli
 - name: Ownpad » Configure connection via Etherpad API
   shell: |
