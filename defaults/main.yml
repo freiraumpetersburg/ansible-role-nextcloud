@@ -117,6 +117,7 @@ nextcloud_apps_disable:
   - admin_audit
   - impersonate  # inactive for security reasons
 nextcloud_apporder:
+  - /apps/dashboard/
   - /apps/activity/
   - /apps/files/
   - /apps/calendar/
@@ -124,7 +125,7 @@ nextcloud_apporder:
   - /apps/spreed/
   - /apps/polls/
   - /apps/deck/
-  - /apps/gallery/
+  - /apps/photos/
   - /apps/contacts/
 
 # ldap
