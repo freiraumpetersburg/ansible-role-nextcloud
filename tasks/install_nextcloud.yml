@@ -20,11 +20,6 @@
     published_ports: "{{ nextcloud_ports }}"
     volumes: "{{ nextcloud_volumes }}"
     env: "{{ nextcloud_environment }}"
-    etc_hosts: >
-      {
-        "{{ nextcloud_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
-        "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
-      }
   when:
     - nextcloud_redis_host != "redis"
 
@@ -40,11 +35,6 @@
       - "redis:redis"
     volumes: "{{ nextcloud_volumes }}"
     env: "{{ nextcloud_environment }}"
-    etc_hosts: >
-      {
-        "{{ nextcloud_collabora_fqdn }}": "{{ nextcloud_docker_ip }}",
-        "{{ nextcloud_fqdn }}": "{{ nextcloud_docker_ip }}"
-      }
   when:
     - nextcloud_redis_host == "redis"
 
