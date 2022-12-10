@@ -1,7 +1,7 @@
 ---
 stage: "production"
 # main
-nextcloud_version: "24.0.7"
+nextcloud_version: "24.0.8"
 nextcloud_state: "started"
 nextcloud_restart_policy: "always"
 nextcloud_port: 1600
