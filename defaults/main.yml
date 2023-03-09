@@ -1,7 +1,7 @@
 ---
 stage: "production"
 # main
-nextcloud_version: "24.0.8"
+nextcloud_version: "25.0.4"
 nextcloud_state: "started"
 nextcloud_restart_policy: "always"
 nextcloud_port: 1600
@@ -85,7 +85,6 @@ nextcloud_default_app: "activity"
 
 nextcloud_apps:
   - admin_audit
-  - apporder
   - calendar
   - contacts
   - data_request  # for GDPR compliance
