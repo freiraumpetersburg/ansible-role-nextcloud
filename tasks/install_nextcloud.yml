@@ -5,9 +5,9 @@
     name: "nextcloud"
     build:
       path: "{{ nextcloud_image_dir }}"
-      pull: yes
+      pull: true
     source: build
-    force_source: yes
+    force_source: true
   when: nextcloud_register_config.changed or nextcloud_force_rebuild
 
 - name: Install nextcloud container
