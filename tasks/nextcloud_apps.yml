@@ -79,9 +79,3 @@
     docker exec --user www-data nextcloud php occ config:app:set theming name --value="{{ nextcloud_theming_name }}"
     docker exec --user www-data nextcloud php occ config:app:set theming slogan --value="{{ nextcloud_theming_slogan }}"
     docker exec --user www-data nextcloud php occ config:app:set theming url --value="{{ nextcloud_theming_url }}"
-
-- name: AppOrder » Set default app order
-  command: >
-    docker exec --user www-data nextcloud
-    php occ config:app:set apporder order
-    --value="[\"{{ nextcloud_apporder | join('\",\"') }}\"]"

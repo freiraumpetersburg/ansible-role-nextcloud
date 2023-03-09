@@ -114,17 +114,6 @@ nextcloud_apps_disable:
   - survey_client
   - admin_audit
   - impersonate  # inactive for security reasons
-nextcloud_apporder:
-  - /apps/dashboard/
-  - /apps/activity/
-  - /apps/files/
-  - /apps/calendar/
-  - /apps/mail/
-  - /apps/spreed/
-  - /apps/polls/
-  - /apps/deck/
-  - /apps/photos/
-  - /apps/contacts/
 
 # ldap
 nextcloud_ldap_enable: False
