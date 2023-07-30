@@ -1,35 +1,18 @@
 FROM nextcloud:{{ nextcloud_version }}-apache
 
 RUN set -ex; \
-    \
     apt-get update; \
-    apt-get install -y --no-install-recommends \
-        ffmpeg \
-        # smbclient \
-        supervisor \
-        # svg support
-        libmagickcore-6.q16-6-extra \
-    ; \
+    apt-get install -y --no-install-recommends ffmpeg supervisor libmagickcore-6.q16-6-extra; \
     rm -rf /var/lib/apt/lists/*
 
 RUN set -ex; \
-    \
     savedAptMark="$(apt-mark showmanual)"; \
-    \
     apt-get update; \
     apt-get install -y --no-install-recommends \
         libbz2-dev \
         # libsmbclient-dev \
     ; \
-    \
-
-    docker-php-ext-install \
-        bz2 \
-    ; \
-    # pecl install smbclient; \
-    # docker-php-ext-enable smbclient; \
-    \
-# reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
+    docker-php-ext-install bz2; \
     apt-mark auto '.*' > /dev/null; \
     apt-mark manual $savedAptMark; \
     ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
@@ -39,14 +22,12 @@ RUN set -ex; \
         | cut -d: -f1 \
         | sort -u \
         | xargs -rt apt-mark manual; \
-    \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
     rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p \
     /var/log/supervisord \
-    /var/run/supervisord \
-;
+    /var/run/supervisord;
 
 COPY supervisord.conf /
 
@@ -61,5 +42,4 @@ COPY log.config.php /usr/src/nextcloud/config/log.config.php
 COPY skeletonfiles.config.php /usr/src/nextcloud/config/skeletonfiles.config.php
 
 ENV NEXTCLOUD_UPDATE=1
-
 CMD ["/usr/bin/supervisord", "-c", "/supervisord.conf"]
