@@ -2,7 +2,7 @@ FROM nextcloud:{{ nextcloud_version }}-apache
 
 RUN set -ex; \
     apt-get update; \
-    apt-get install -y --no-install-recommends ffmpeg supervisor libmagickcore-6.q16-6-extra; \
+    apt-get install -y --no-install-recommends ffmpeg supervisor libmagickcore-7.q16-10-extra; \
     rm -rf /var/lib/apt/lists/*
 
 RUN set -ex; \
